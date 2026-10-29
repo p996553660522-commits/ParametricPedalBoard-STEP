@@ -11,14 +11,14 @@ On Linux/macOS, create a Python 3.12 virtual environment, install `step/requirem
 ## Export
 
 * **STEP: assembly** downloads one self-contained `Pedalboard-assembly.step`. All geometry is embedded. Identical construction histories share one part definition with multiple placements. No companion files are required.
-* **STEP: multibody part** downloads one `Pedalboard-multibody.step`, with the complete positioned board as separate solids inside one part. There is no assembly hierarchy. Components are not fused.
+* **STEP: multibody part** downloads one `Pedalboard-single-part.step`, with the complete positioned board as separate solids inside one product. Automatic OCCT assembly conversion is explicitly disabled (`write.step.assembly=0`); regression tests check one PRODUCT and zero assembly occurrences. Components are not fused.
 * **STEP: parts (ZIP)** downloads the printable part types in print orientation, with quantities in `manifest.json`. A row's **STEP** button downloads that part directly. Lettering inlays remain separate solids in the same file.
 
 The assembly follows `result.assembly`: profiles, braces, placed clips and the PSU envelope are included. The original preview's schematic screws/nuts are in `result.hardware`, so they are not exported. Unplaced clips keep the original staging position.
 
 ## SolidWorks
 
-Open the **assembly STEP alone** with **Assembly Structure Mapping → Default (As per the file)**. Its components are embedded, not external STEP dependencies. SolidWorks may create native part documents according to its import settings. For one document, use multibody export or **Import assembly as multiple body part**. When breaking a 3D Interconnect link, **Create virtual components** keeps parts internal; **Create external files** produces separate native files.
+Open the **assembly STEP alone** with **Assembly Structure Mapping → Default (As per the file)**. This is a real assembly: its component geometry is embedded, but SolidWorks can open component documents. For a single part document, use **multibody part** and clear **Import multiple bodies as parts**, or select **Import assembly as multiple body part**. The exporter cannot override the CAD application's explicit choice to split bodies into parts. When breaking a 3D Interconnect link, **Create virtual components** keeps parts internal; **Create external files** produces separate native files.
 
 References: [STEP import and structure mapping](https://help.solidworks.com/2024/english/SolidWorks/sldworks/t_reading_step_iges_acis_sw.htm), [general import options](https://help.solidworks.com/2026/english/SolidWorks/sldworks/hidd_options_import_general.htm).
 
@@ -36,6 +36,7 @@ Run from the repository root:
 node step/test-generator.mjs
 .venv-step\Scripts\python.exe step/test_cad.py
 .venv-step\Scripts\python.exe step/test_assembly.py
+.venv-step\Scripts\python.exe step/test_multibody.py
 ```
 
 Generator regression compares all original outputs, including mesh buffers, BOM, warnings and drawings, against the pinned upstream source. Six cases cover printed board, aluminium, slotted plate with both clip types, bent board, three tiers, and lettering with an inlay. CAD tests validate solids, mesh-relative bounds/volume and STEP round trips. Assembly tests check shared definitions, placement, one embedded root and absence of mesh/external-file entities.

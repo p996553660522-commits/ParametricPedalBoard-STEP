@@ -12,6 +12,9 @@ from cadquery.occ_impl.shapes import sortWiresByBuildOrder
 from cadquery.occ_impl.exporters.assembly import exportAssembly
 from OCP.BRepOffsetAPI import BRepOffsetAPI_MakeOffset
 from OCP.GeomAbs import GeomAbs_Arc, GeomAbs_Intersection
+from OCP.STEPControl import STEPControl_Writer, STEPControl_AsIs
+from OCP.Interface import Interface_Static
+from OCP.IFSelect import IFSelect_RetDone
 
 
 def compound(shapes):
@@ -192,6 +195,28 @@ def build_assembly(job, replay):
     return assembly, instances, len(definitions)
 
 
+def export_part(shape, filename):
+    """Write a true single product, including when it has several solids.
+
+    OCCT defaults to auto-assembly for compounds. Explicitly disabling this is
+    essential: flattening the Python assembly alone does not flatten STEP.
+    """
+    writer = STEPControl_Writer()
+    previous = Interface_Static.IVal_s('write.step.assembly')
+    previous_name = Interface_Static.CVal_s('write.step.product.name')
+    try:
+        if not Interface_Static.SetIVal_s('write.step.assembly', 0):
+            raise ValueError('Cannot disable automatic STEP assemblies')
+        Interface_Static.SetCVal_s('write.step.product.name', Path(filename).stem)
+        if writer.Transfer(shape.wrapped, STEPControl_AsIs) != IFSelect_RetDone:
+            raise ValueError('STEP part transfer failed')
+        if writer.Write(str(filename)) != IFSelect_RetDone:
+            raise ValueError('STEP part writer failed')
+    finally:
+        Interface_Static.SetIVal_s('write.step.assembly', previous)
+        Interface_Static.SetCVal_s('write.step.product.name', previous_name)
+
+
 def export(job, output):
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -212,17 +237,17 @@ def export_in_directory(job, output):
         name = re.sub(r'[^A-Za-z0-9.-]+', '_', p['name']).strip('._')[:90] or 'part'
         shape = checked_shape(replay, p['node'])
         filename = f'{i+1:03}_{name}.step'
-        cq.exporters.export(shape, str(output / filename))
+        export_part(shape, output / filename)
         report['parts'].append({'name': p['name'], 'qty': p['qty'], 'file': filename, 'solids': len(shape.Solids()), 'volume_mm3': shape.Volume()})
         if 'inlay' in p:
             # Keep the insert as a separate solid inside the same part file.
             inlay = checked_shape(replay, p['inlay'])
-            cq.exporters.export(compound([shape, inlay]), str(output / filename))
+            export_part(compound([shape, inlay]), output / filename)
             report['parts'][-1]['inlay_solids'] = len(inlay.Solids())
     if job.get('assembly'):
         assembly, report['assembly'], report['unique_definitions'] = build_assembly(job, replay)
         if job.get('selection') == 'multibody':
-            cq.exporters.export(assembly.toCompound(), str(output / 'Pedalboard-multibody.step'))
+            export_part(assembly.toCompound(), output / 'Pedalboard-single-part.step')
         else:
             if not exportAssembly(assembly, str(output / 'Pedalboard-assembly.step')):
                 raise ValueError('STEP assembly writer failed')
