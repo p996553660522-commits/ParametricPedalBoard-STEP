@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import { initGeometry, generate } from '../js/pedalboard.js';
+import { initI18n } from '../js/i18n.js';
+import { stepRequest } from '../js/step-recorder.js';
+await initI18n('en', async () => (await import('../js/lang/en.js')).default);
+await initGeometry();
+const params = process.argv[3] ? JSON.parse(process.argv[3]) : {};
+const result = generate(params);
+console.log(JSON.stringify({ errors: result.errors, parts: result.parts.length, assembly: result.assembly.length, nodes: result.stepGraph?.length }));
+fs.writeFileSync(process.argv[2], JSON.stringify(stepRequest(result)));
+process.exit(0);

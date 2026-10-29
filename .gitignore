@@ -1,3 +1,9 @@
 .claude/
 *.log
 node_modules/
+.venv-step/
+__pycache__/
+step-output/
+*.step-job.json
+js/pedalboard.baseline.js
+inspect.mjs

@@ -268,7 +268,13 @@ tr.sel td { background: var(--accent-soft); }
         <button role="tab" id="tab-draw" aria-selected="false" aria-controls="pane-draw" data-i18n="tab.draw">Drawing</button>
         <button role="tab" id="tab-msgs" aria-selected="false" aria-controls="pane-msgs"><span data-i18n="tab.msgs">Checks</span> <span class="count" id="c-msgs">0</span></button>
         <span class="spacer"></span>
-        <div class="actions"><button type="button" class="btn primary" id="zip" data-i18n="tab.zip">All STL as ZIP</button></div>
+        <div class="actions"><button type="button" class="btn primary" id="zip" data-i18n="tab.zip">All STL as ZIP</button>
+          <button type="button" class="btn" id="step-all">STEP: parts (ZIP)</button>
+          <button type="button" class="btn" id="step-assembly">STEP: assembly</button>
+          <button type="button" class="btn" id="step-multibody">STEP: multibody part</button>
+          <a href="STEP.md" target="_blank" rel="noopener">STEP setup</a>
+        </div>
+        <p id="step-status" class="notes" role="status" aria-live="polite"></p>
       </div>
       <div class="pane" id="pane-parts" role="tabpanel"></div>
       <div class="pane" id="pane-plates" role="tabpanel" hidden></div>

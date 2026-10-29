@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { exportStep } from './step-export.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { initGeometry, generate, setTextShaper, DEFAULTS, PROFILES, SCREW, CLIP_SIZES, CLIP_TYPES } from './pedalboard.js';
 import { buildDrawing } from './drawing.js';
@@ -817,7 +818,7 @@ function renderParts() {
     <td>${pt.fit.ok ? `<span class="pill ok">${t('parts.fits')}${pt.fit.angle ? t('parts.diagonal', { a: fmt(pt.fit.angle, 1) }) : ''}</span>` : `<span class="pill bad">${t('parts.noFit')}</span>`}</td>
     <td class="n">${fmt(pt.volume * pt.qty, 0)} cm³</td>
     <td class="n">${fmt(gramsOf(pt), 0)} g</td>
-    <td><button type="button" class="btn" data-stl="${i}">STL</button>${pt.inlay ? ` <button type="button" class="btn" data-stlt="${i}" title="${t('parts.inlayTitle')}">${t('parts.inlay')}</button>` : ''}</td></tr>`).join('');
+    <td><button type="button" class="btn" data-step="${i}">STEP</button> <button type="button" class="btn" data-stl="${i}">STL</button>${pt.inlay ? ` <button type="button" class="btn" data-stlt="${i}" title="${t('parts.inlayTitle')}">${t('parts.inlay')}</button>` : ''}</td></tr>`).join('');
   pane.innerHTML = `<div class="tablewrap"><table>
     <thead><tr><th>${t('parts.th.part')}</th><th class="n">${t('parts.th.qty')}</th><th class="n">${t('parts.th.size')}</th><th>${t('parts.th.bed')}</th><th class="n">${t('parts.th.vol')}</th><th class="n">${t('parts.th.fil')}</th><th></th></tr></thead>
     <tbody>${rows}</tbody></table></div>
@@ -1182,6 +1183,14 @@ function stl(part) {
   }
   return buf;
 }
+
+document.getElementById('step-all').addEventListener('click', () => exportStep(result, 'parts'));
+document.getElementById('step-assembly').addEventListener('click', () => exportStep(result, 'assembly'));
+document.getElementById('step-multibody').addEventListener('click', () => exportStep(result, 'multibody'));
+document.addEventListener('click', e => {
+  const button = e.target.closest('[data-step]');
+  if (button) exportStep(result, Number(button.dataset.step));
+});
 function fileName(pt) {
   return pt.name.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
     .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') + (pt.qty > 1 ? `_x${pt.qty}` : '');

@@ -6,6 +6,7 @@
 //   a = Weg entlang der Oberseite ab Vorderkante, b = Normale zur Oberseite (0 = Oberfläche).
 
 import { t as tr, tn as trn, fx, num } from './i18n.js';
+import { installStepRecorder, resetStepRecording, stepNode, stepGraph } from './step-recorder.js';
 
 let M = null;
 const garbage = [];
@@ -19,6 +20,7 @@ export async function initGeometry() {
   const wasm = await Module();
   wasm.setup();
   installGC(wasm);
+  installStepRecorder(wasm);
   M = wasm;
 }
 
@@ -1260,7 +1262,7 @@ function toMesh(m) {
     for (let i = 0; i < nv; i++) { out[3 * i] = pos[np * i]; out[3 * i + 1] = pos[np * i + 1]; out[3 * i + 2] = pos[np * i + 2]; }
     pos = out;
   } else pos = new Float32Array(pos);
-  return { positions: pos, indices: new Uint32Array(mesh.triVerts) };
+  return { positions: pos, indices: new Uint32Array(mesh.triVerts), step: stepNode(m) };
 }
 
 function printPart(G, m, name, qty, extra = {}, inlay = null) {
@@ -1275,6 +1277,7 @@ function printPart(G, m, name, qty, extra = {}, inlay = null) {
 
 // ================================================================ Hauptfunktion
 export function generate(params) {
+  resetStepRecording();
   const p = { ...DEFAULTS, ...params };
   const G = derive(p);
   const result = { errors: G.errors, warnings: G.warnings, parts: [], assembly: [], hardware: [], bom: [], info: {}, drawing: null };
@@ -1644,6 +1647,7 @@ export function generate(params) {
     console.error(e);
     G.errors.push(tr('e.geomError', { msg: e.message }));
   } finally {
+    result.stepGraph = stepGraph();
     collect();
   }
   return result;
