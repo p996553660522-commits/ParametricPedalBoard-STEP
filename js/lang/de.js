@@ -18,7 +18,7 @@ export default {
   'mode.plate.disabledTitle': `Bei mehrstufigen Boards noch nicht möglich (Stufen zuerst auf 1 stellen)`,
   'foot.saved': `Die Einstellungen werden in diesem Browser gespeichert.`,
   'foot.reset': `Auf Standard zurücksetzen`,
-  'foot.oss': `Kostenlos und Open Source (<a href="https://github.com/maxxs78/ParametricPedalBoard" target="_blank" rel="noopener">GitHub</a>). Gefällt dir das Tool?`,
+  'foot.oss': `Kostenlos und Open Source (<a href="https://github.com/p996553660522-commits/ParametricPedalBoard-STEP" target="_blank" rel="noopener">GitHub</a>). Gefällt dir das Tool?`,
   'tool.back': `← Zurück zur Baugruppe`,
   'tool.hw': `Normteile`,
   'tool.transparent': `Transparent`,

@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const out = process.argv[2] || '_site';
+fs.mkdirSync(out, { recursive: true });
+for (const file of ['index.html', 'STEP.md', 'THIRD_PARTY.md', 'LICENSE']) fs.copyFileSync(file, path.join(out, file));
+for (const dir of ['js', 'lib']) fs.cpSync(dir, path.join(out, dir), { recursive: true });
+const vendor = path.join(out, 'lib/cad');
+fs.mkdirSync(vendor, { recursive: true });
+for (const file of ['replicad.js', 'casting-c4FpthHM.js']) fs.copyFileSync(`node_modules/replicad/dist/${file}`, path.join(vendor, file));
+for (const ext of ['js', 'wasm']) fs.copyFileSync(`node_modules/replicad-opencascadejs/dist/replicad_single.${ext}`, path.join(vendor, `opencascade.${ext}`));
+for (const pkg of ['replicad','replicad-opencascadejs']) fs.copyFileSync(`node_modules/${pkg}/LICENSE`, path.join(vendor, `LICENSE-${pkg}`));
+fs.writeFileSync(path.join(out, '.nojekyll'), '');
+console.log(`Static website prepared in ${out}`);

@@ -18,7 +18,7 @@ export default {
   'mode.plate.disabledTitle': `Not yet possible for multi-tier boards (set tiers to 1 first)`,
   'foot.saved': `Your settings are saved in this browser.`,
   'foot.reset': `Reset to defaults`,
-  'foot.oss': `Free and open source (<a href="https://github.com/maxxs78/ParametricPedalBoard" target="_blank" rel="noopener">GitHub</a>). Like the tool?`,
+  'foot.oss': `Free and open source (<a href="https://github.com/p996553660522-commits/ParametricPedalBoard-STEP" target="_blank" rel="noopener">GitHub</a>). Like the tool?`,
   'tool.back': `← Back to assembly`,
   'tool.hw': `Hardware`,
   'tool.transparent': `Transparent`,

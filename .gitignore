@@ -7,3 +7,4 @@ step-output/
 *.step-job.json
 js/pedalboard.baseline.js
 inspect.mjs
+_site/

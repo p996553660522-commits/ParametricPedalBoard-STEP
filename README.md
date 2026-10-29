@@ -2,7 +2,9 @@
 
 # Parametric Pedal Board — STEP edition
 
-This fork adds analytic STEP export for **individual parts, a self-contained assembly, and a multibody part**, preserving the original construction logic. Run **`start-step.bat`** with Python 3.12 and open http://127.0.0.1:8123/?lang=en. See **[STEP setup, SolidWorks import and verification](STEP.md)**. The live link below is the original upstream configurator; it does not include this fork's STEP backend.
+**[▶ Open this fork's live STEP configurator](https://p996553660522-commits.github.io/ParametricPedalBoard-STEP/?lang=en)**
+
+This fork adds analytic STEP export for **individual parts, a self-contained assembly, and a multibody part**, preserving the original construction logic. The website computes CAD solids and STEP entirely in a browser worker; no server or Python installation is needed. The first export downloads the approximately 23 MB CAD kernel. See **[STEP export, SolidWorks import and verification](STEP.md)**. `start-step.bat` remains available as an optional local Python backend. The link below opens the original upstream configurator.
 
 **[▶ Open the live configurator](https://maxxs78.github.io/ParametricPedalBoard/?lang=en)** · [🇩🇪 auf Deutsch](https://maxxs78.github.io/ParametricPedalBoard/?lang=de)
 

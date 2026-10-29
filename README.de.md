@@ -2,7 +2,9 @@
 
 # Parametric Pedal Board — STEP edition
 
-Dieser Fork ergänzt STEP-Export für Einzelteile, eine eingebettete Baugruppe und ein Mehrkörperteil. Die Konstruktionslogik bleibt erhalten. Start: `start-step.bat` mit Python 3.12. Siehe [STEP-Anleitung und SolidWorks-Import](STEP.md). Der ursprüngliche Live-Konfigurator enthält diesen lokalen STEP-Export nicht.
+**[▶ STEP-Konfigurator dieses Forks öffnen](https://p996553660522-commits.github.io/ParametricPedalBoard-STEP/?lang=de)**
+
+Dieser Fork ergänzt STEP-Export für Einzelteile, eine eingebettete Baugruppe und ein Mehrkörperteil. Die Konstruktionslogik bleibt erhalten. Die Website berechnet STEP direkt im Browser, ohne Python oder Server. Beim ersten Export wird der CAD-Kern (ca. 23 MB) geladen. Siehe [STEP-Anleitung und SolidWorks-Import](STEP.md). `start-step.bat` bietet weiterhin das optionale lokale Python-Backend.
 
 **[▶ Live-Konfigurator öffnen](https://maxxs78.github.io/ParametricPedalBoard/?lang=de)** · [🇬🇧 in English](https://maxxs78.github.io/ParametricPedalBoard/?lang=en)
 

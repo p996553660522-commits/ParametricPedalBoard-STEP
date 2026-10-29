@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "scripts": { "build": "node tools/build-web.mjs" },
+  "devDependencies": {
+    "replicad": "1.2.0",
+    "replicad-opencascadejs": "1.1.0"
+  }
+}
